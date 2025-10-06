@@ -23,7 +23,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.RadioButton
 import androidx.compose.ui.Alignment
-
+import androidx.compose.material3.Divider
+import java.util.Locale
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,6 +69,18 @@ fun TipScreen(modifier: Modifier = Modifier) {
     val pinkBg = Color(0xFFFFE6F0) //цвет
     val options = listOf(3, 5, 7, 10) //список скидок
 
+    // количество блюд в Int (если не число -> 0)
+    val dishesCount = dishesInput.toIntOrNull() ?: 0
+    // автоподбор процента скидки по заданным правилам
+    val discountPercent = when {
+        dishesCount in 1..2 -> 3
+        dishesCount in 3..5 -> 5
+        dishesCount in 6..10 -> 7
+        dishesCount > 10 -> 10
+        else -> 0
+    }
+
+
     @Composable
     fun InputRow(label: String, value: String, onChange: (String) -> Unit) { //размещение элементов в стоку
         Row(modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -93,7 +106,6 @@ fun TipScreen(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        // Slider with labels 0 and 25 and current value above
         Column(modifier = Modifier.fillMaxWidth()) {
             Text(text = "Чаевые: ${tipPercent.toInt()}%", modifier = Modifier.align(Alignment.CenterHorizontally))
             Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 4.dp)) {
@@ -107,11 +119,12 @@ fun TipScreen(modifier: Modifier = Modifier) {
 
         Text(text = "Скидка:")
         Row(modifier = Modifier.fillMaxWidth().padding(top = 8.dp), verticalAlignment = Alignment.CenterVertically) {
+            // теперь мы показываем опции и отмечаем ту, которая равна discountPercent
             options.forEach { opt ->
                 Row(modifier = Modifier.weight(1f), verticalAlignment = Alignment.CenterVertically) {
-                    RadioButton(selected = false, onClick = { }, enabled = true)
+                    RadioButton(selected = (opt == discountPercent), onClick = { /* disabled - выбор программный */ }, enabled = false)
                     Spacer(modifier = Modifier.width(4.dp))
-                    Text(text = "$opt%") //рядом процент
+                    Text(text = "$opt%")
                 }
             }
         }
