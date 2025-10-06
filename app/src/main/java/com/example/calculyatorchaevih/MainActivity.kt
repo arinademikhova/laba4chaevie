@@ -12,6 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.calculyatorchaevih.ui.theme.CalculyatorChaevihTheme
+import androidx.compose.foundation.layout.*
+import androidx.compose.ui.unit.dp
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,8 +31,17 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun TipScreen(modifier: Modifier = Modifier) {                           // TipScreen — временный заголовок экрана
-    Text(text = "Калькулятор чаевых", modifier = modifier)
+fun TipScreen(modifier: Modifier = Modifier) {
+    Column(modifier = modifier
+        .fillMaxSize()
+        .padding(16.dp)) {
+        Text(
+            text = "Калькулятор чаевых",
+            style = androidx.compose.material3.MaterialTheme.typography.titleLarge
+        )
+        Spacer(modifier = Modifier.height(12.dp))
+
+    }
 }
 
 @Preview(showBackground = true)
